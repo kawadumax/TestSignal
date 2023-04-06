@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    This file contains the basic framework code for a JUCE plugin editor.
+	This file contains the basic framework code for a JUCE plugin editor.
 
   ==============================================================================
 */
@@ -10,24 +10,32 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-
+#include "Control.h"
 //==============================================================================
 /**
 */
-class TestSignalAudioProcessorEditor  : public juce::AudioProcessorEditor
+class TestSignalAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
-    TestSignalAudioProcessorEditor (TestSignalAudioProcessor&);
-    ~TestSignalAudioProcessorEditor() override;
+	TestSignalAudioProcessorEditor(TestSignalAudioProcessor& p, AudioProcessorValueTreeState& apvts);
+	~TestSignalAudioProcessorEditor() override;
 
-    //==============================================================================
-    void paint (juce::Graphics&) override;
-    void resized() override;
+	//==============================================================================
+	void paint(juce::Graphics&) override;
+	void resized() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
-    TestSignalAudioProcessor& audioProcessor;
+	// This reference is provided as a quick way for your editor to
+	// access the processor object that created it.
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TestSignalAudioProcessorEditor)
+	typedef juce::AudioProcessorValueTreeState::ComboBoxAttachment ComboBoxAttachment;
+	typedef juce::AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+
+	TestSignalAudioProcessor& audioProcessor;
+	AudioProcessorValueTreeState& apvts;
+	std::unique_ptr<ComboBoxAttachment> noiseTypeAttachment;
+	ComboBox noiseTypeComboBox;
+	Control gainControl;
+
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TestSignalAudioProcessorEditor)
 };
