@@ -2,12 +2,15 @@
 
 <JUCERPROJECT id="sz7ckD" name="TestSignal" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="1" jucerFormatVersion="1" version="0.0.1"
-              companyName="UAaudio" pluginCharacteristicsValue="pluginIsSynth"
+              companyName="UTaudio" pluginCharacteristicsValue="pluginIsSynth"
               pluginManufacturerCode="UTau" companyWebsite="https://github.com/kawadumax/TestSignal">
   <MAINGROUP id="XaBOg6" name="TestSignal">
     <GROUP id="{55E40EEA-B31D-3318-929E-7F1B1F542C63}" name="Source">
       <FILE id="QijMR2" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
+      <FILE id="klLr1n" name="Control.h" compile="0" resource="0" file="Source/Control.h"/>
+      <FILE id="PCwnoU" name="Control.cpp" compile="1" resource="0" file="Source/Control.cpp"/>
+      <FILE id="gXwtm7" name="Constants.h" compile="0" resource="0" file="Source/Constants.h"/>
       <FILE id="v1o4Zn" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
       <FILE id="mkSOYg" name="PluginEditor.cpp" compile="1" resource="0"

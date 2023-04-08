@@ -33,11 +33,12 @@ TestSignalAudioProcessor::TestSignalAudioProcessor()
 			PARAMETER_ID::GAIN_ID,
 			"Gain",
 			NormalisableRange<float>(0.0f, 1.0f, 0.01f),
-			0.5
+			0.3
 			),
 		})
 #endif
 {
+	apvts.addParameterListener(Constants::PARAMETER_ID::GAIN_ID, this);
 }
 
 TestSignalAudioProcessor::~TestSignalAudioProcessor()
@@ -151,27 +152,33 @@ void TestSignalAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, ju
 	auto totalNumInputChannels = getTotalNumInputChannels();
 	auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-	// In case we have more outputs than inputs, this code clears any output
-	// channels that didn't contain input data, (because these aren't
-	// guaranteed to be empty - they may contain garbage).
-	// This is here to avoid people getting screaming feedback
-	// when they first compile a plugin, but obviously you don't need to keep
-	// this code if your algorithm always overwrites all the output channels.
-	for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-		buffer.clear(i, 0, buffer.getNumSamples());
-
 	// This is the place where you'd normally do the guts of your plugin's
 	// audio processing...
 	// Make sure to reset the state if your inner loop is processing
 	// the samples and the outer loop is handling the channels.
 	// Alternatively, you can process the samples with the channels
 	// interleaved by keeping the same state.
-	for (int channel = 0; channel < totalNumInputChannels; ++channel)
-	{
-		auto* channelData = buffer.getWritePointer(channel);
 
-		// ..do something to the data...
+	const int numChannels = buffer.getNumChannels();
+	const int numSamples = buffer.getNumSamples();
+
+	// ステレオ出力を想定しているため、2チャンネルが必要です。
+	jassert(numChannels == 2);
+
+	// バッファの内容をクリアします。
+	buffer.clear();
+
+	// 左右のチャンネルに同じホワイトノイズを書き込みます。
+	for (int sample = 0; sample < numSamples; ++sample)
+	{
+		float noise = (random.nextFloat() * 2.0f - 1.0f) * gain; // -1.0 から 1.0 の範囲でランダムな値を生成
+
+		for (int channel = 0; channel < numChannels; ++channel)
+		{
+			buffer.setSample(channel, sample, noise);
+		}
 	}
+
 }
 
 //==============================================================================
@@ -204,4 +211,14 @@ void TestSignalAudioProcessor::setStateInformation(const void* data, int sizeInB
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
 	return new TestSignalAudioProcessor();
+}
+
+// AudioProcessorValueTreeState::Listener の parameterChanged をオーバーライド
+void TestSignalAudioProcessor::parameterChanged(const String& parameterID, float newValue)
+{
+	// パラメータが変更されたときに実行される処理をここに書く
+	DBG("Parameter " << parameterID << " changed to " << newValue);
+	if (parameterID == Constants::PARAMETER_ID::GAIN_ID) {
+		gain = newValue;
+	}
 }

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <JuceHeader.h>
 
@@ -17,7 +17,7 @@ public:
 	}
 
 	inline static const juce::StringArray NOISE_OPTIONS = {
-		"WhiteNoise","PinkNoise"
+		"WhiteNoise","PinkNoise(Unimplemented)"
 	};
 
 	inline static const struct PARAMETER_ID {

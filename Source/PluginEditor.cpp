@@ -91,7 +91,7 @@ TestSignalAudioProcessorEditor::TestSignalAudioProcessorEditor(TestSignalAudioPr
 	addAndMakeVisible(label.get());
 
 	auto attachment = std::make_unique<SliderAttachment>(apvts, Constants::PARAMETER_ID::GAIN_ID, *slider);
-	//attachment.reset(new SliderAttachment(apvts, Constants::PARAMETER_ID::GAIN_ID, *slider));
+	attachment.reset(new SliderAttachment(apvts, Constants::PARAMETER_ID::GAIN_ID, *slider));
 
 	// Add the slider, label, and attachment to a new Controll instance
 	gainControl.initialize(std::move(slider), std::move(label), std::move(attachment));

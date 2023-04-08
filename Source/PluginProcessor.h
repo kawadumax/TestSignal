@@ -17,6 +17,7 @@ class TestSignalAudioProcessor : public juce::AudioProcessor
 #if JucePlugin_Enable_ARA
 	, public juce::AudioProcessorARAExtension
 #endif
+	, AudioProcessorValueTreeState::Listener
 {
 public:
 	//==============================================================================
@@ -56,8 +57,12 @@ public:
 	void getStateInformation(juce::MemoryBlock& destData) override;
 	void setStateInformation(const void* data, int sizeInBytes) override;
 
+	//==============================================================================
+	void parameterChanged(const String& parameterID, float newValue) override;
 private:
 	AudioProcessorValueTreeState apvts;
+	Random random;
+	float gain = 1.0;
 
 	//==============================================================================
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TestSignalAudioProcessor)
